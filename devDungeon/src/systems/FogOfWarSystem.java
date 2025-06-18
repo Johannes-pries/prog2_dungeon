@@ -33,7 +33,8 @@ public class FogOfWarSystem extends System {
   private static final float TINT_COLOR_WALL_DISTANCE_SCALE =
       1.5f; // scale factor for behind wall distance fog
   private static final float TINT_COLOR_DISTANCE_SCALE = .5f; // scale factor for distance fog
-  public static int VIEW_DISTANCE = 7; // view distance (range for tile that are fully visible)
+  // I Increased the view distance
+  public static int VIEW_DISTANCE = 24; // view distance (range for tile that are fully visible)
   public static int MAX_VIEW_DISTANCE =
       25; // max view distance (all tiles to consider for calculation)
   private final Map<Tile, Integer> darkenedTiles = new HashMap<>();
