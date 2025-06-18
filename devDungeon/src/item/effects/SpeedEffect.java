@@ -1,6 +1,7 @@
 package item.effects;
 
 import core.Entity;
+import core.components.VelocityComponent;
 import systems.EventScheduler;
 
 /**
@@ -36,6 +37,18 @@ public class SpeedEffect {
    * @param target The entity to which the speed effect will be applied.
    */
   public void applySpeedEffect(Entity target) {
-    throw new UnsupportedOperationException("Method not implemented.");
+    // Versuche die SpeedComponent zu holen
+    target.fetch(VelocityComponent.class).ifPresent(vc -> {
+      float xSpeed = vc.xVelocity();
+      float ySpeed = vc.yVelocity();
+      vc.xVelocity(xSpeed + speedIncrease);
+      vc.yVelocity(ySpeed + speedIncrease);
+
+      // Nach Ablauf der Dauer Geschwindigkeit zurücksetzen
+      EVENT_SCHEDULER.scheduleAction(() -> {
+        vc.xVelocity(xSpeed);
+        vc.yVelocity(ySpeed);
+      }, duration);
+    });
   }
 }
