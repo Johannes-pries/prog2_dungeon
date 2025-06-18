@@ -152,12 +152,7 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
     if (isFirstTick) {
       initializeLevel();
 
-      // Create teleporters
-      for (int i = 65; i < 127; i += 2) {
-        TeleporterSystem.getInstance()
-            .registerTeleporter(
-                new Teleporter(this.customPoints().get(i), this.customPoints().get(i + 1)));
-      }
+      setupTeleporters();
 
       // Setup TP Targets for TPBallSkill
       int[] roomIndices = {0, 1, 2, 3, 7};
@@ -181,13 +176,7 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
             .triggerInteraction(torch, Game.hero().orElse(null));
       }
 
-      // Draw teleporter connections
-      TeleporterSystem.getInstance().teleporter().stream()
-          .map(Teleporter::from)
-          .forEach((tp) -> this.tileAt(tp).tintColor(0x444444FF)); // dark tint for teleporter
-      TeleporterSystem.getInstance().teleporter().stream()
-          .map(Teleporter::to)
-          .forEach((tp) -> this.tileAt(tp).tintColor(0x444444FF)); // dark tint for teleporter
+      
 
       Entity b =
           EntityUtils.spawnBoss(
@@ -276,6 +265,25 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
     }
 
     this.riddleHandler.onTick(isFirstTick);
+  }
+
+  /**
+   * Create the Teleporters
+   */
+  private void setupTeleporters() {
+    for (int location = 65; location < 127; location += 2) {
+      TeleporterSystem.getInstance()
+          .registerTeleporter(
+              new Teleporter(this.customPoints().get(location), this.customPoints().get(location + 1)));
+    }
+
+    // Draw teleporter connections
+      TeleporterSystem.getInstance().teleporter().stream()
+          .map(Teleporter::from)
+          .forEach((tp) -> this.tileAt(tp).tintColor(0x444444FF)); // dark tint for teleporter
+      TeleporterSystem.getInstance().teleporter().stream()
+          .map(Teleporter::to)
+          .forEach((tp) -> this.tileAt(tp).tintColor(0x444444FF)); // dark tint for teleporter
   }
 
   /**
