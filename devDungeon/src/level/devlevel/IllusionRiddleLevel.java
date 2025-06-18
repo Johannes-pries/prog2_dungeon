@@ -160,41 +160,7 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
 
       
 
-      Entity b =
-          EntityUtils.spawnBoss(
-              BOSS_TYPE,
-              this.levelBossSpawn,
-              (e) -> {
-                ((FogOfWarSystem) Game.systems().get(FogOfWarSystem.class)).active(false);
-                // turn of all torches on death
-                DevDungeonRoom devDungeonRoom = this.getCurrentRoom();
-                if (devDungeonRoom == null || devDungeonRoom != this.rooms.getLast()) {
-                  return; // should not happen, just if boss dies while not in boss room
-                }
-                this.lastRoom.lightTorch(devDungeonRoom, 0, false);
-                this.lastRoom.lightTorch(devDungeonRoom, 1, false);
-
-                this.exitTiles().forEach(tile -> tile.tintColor(-1)); // Workaround due to FogOfWar
-              });
-      HealthComponent bhc =
-          b.fetch(HealthComponent.class)
-              .orElseThrow(() -> MissingComponentException.build(b, HealthComponent.class));
-      bhc.onHit(
-          (cause, dmg) -> {
-            int currentHealth = bhc.currentHealthpoints() - dmg.damageAmount();
-            int maxHealth = bhc.maximalHealthpoints();
-
-            DevDungeonRoom devDungeonRoom = this.getCurrentRoom();
-            if (devDungeonRoom == null || devDungeonRoom != this.rooms.getLast()) {
-              return;
-            }
-
-            double healthPercentage = (double) currentHealth / maxHealth;
-            if (healthPercentage <= 0.5) {
-              this.lastRoom.lightTorch(devDungeonRoom, 0, true);
-              this.lastRoom.lightTorch(devDungeonRoom, 1, true);
-            }
-          });
+      spawnBossAndHandleEvents();
 
       // Secret Passages
       EntityUtils.spawnLever(
@@ -247,6 +213,47 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
     }
 
     this.riddleHandler.onTick(isFirstTick);
+  }
+
+  /**
+   * Spawn Boss and Handle the health when a hit is landed
+   */
+  private void spawnBossAndHandleEvents() {
+    Entity boss =
+        EntityUtils.spawnBoss(
+            BOSS_TYPE,
+            this.levelBossSpawn,
+            (e) -> {
+              ((FogOfWarSystem) Game.systems().get(FogOfWarSystem.class)).active(false);
+              // turn of all torches on death
+              DevDungeonRoom devDungeonRoom = this.getCurrentRoom();
+              if (devDungeonRoom == null || devDungeonRoom != this.rooms.getLast()) {
+                return; // should not happen, just if boss dies while not in boss room
+              }
+              this.lastRoom.lightTorch(devDungeonRoom, 0, false);
+              this.lastRoom.lightTorch(devDungeonRoom, 1, false);
+
+              this.exitTiles().forEach(tile -> tile.tintColor(-1)); // Workaround due to FogOfWar
+            });
+    HealthComponent bhc =
+        boss.fetch(HealthComponent.class)
+            .orElseThrow(() -> MissingComponentException.build(boss, HealthComponent.class));
+    bhc.onHit(
+        (cause, dmg) -> {
+          int currentHealth = bhc.currentHealthpoints() - dmg.damageAmount();
+          int maxHealth = bhc.maximalHealthpoints();
+
+          DevDungeonRoom devDungeonRoom = this.getCurrentRoom();
+          if (devDungeonRoom == null || devDungeonRoom != this.rooms.getLast()) {
+            return;
+          }
+
+          double healthPercentage = (double) currentHealth / maxHealth;
+          if (healthPercentage <= 0.5) {
+            this.lastRoom.lightTorch(devDungeonRoom, 0, true);
+            this.lastRoom.lightTorch(devDungeonRoom, 1, true);
+          }
+        });
   }
 
   /**
