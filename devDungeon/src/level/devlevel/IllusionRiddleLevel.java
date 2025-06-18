@@ -154,15 +154,7 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
 
       setupTeleporters();
 
-      // Setup TP Targets for TPBallSkill
-      int[] roomIndices = {0, 1, 2, 3, 7};
-      for (int ri : roomIndices) {
-        this.addTPTarget(
-            this.rooms.get(ri).tiles().stream()
-                .filter(tile -> tile.levelElement() == LevelElement.FLOOR)
-                .map(Tile::coordinate)
-                .toArray(Coordinate[]::new));
-      }
+      setupTPTargets();
 
       // Open Pits for last room (boss room) and extinguish torches
       this.rooms.getLast().tiles().stream()
@@ -265,6 +257,20 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
     }
 
     this.riddleHandler.onTick(isFirstTick);
+  }
+
+  /**
+   * Setup teleporters Targets for TPBallSkill
+   */
+  private void setupTPTargets() {
+    int[] roomIndices = {0, 1, 2, 3, 7};
+    for (int ri : roomIndices) {
+      this.addTPTarget(
+          this.rooms.get(ri).tiles().stream()
+              .filter(tile -> tile.levelElement() == LevelElement.FLOOR)
+              .map(Tile::coordinate)
+              .toArray(Coordinate[]::new));
+    }
   }
 
   /**
