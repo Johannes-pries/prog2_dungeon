@@ -1,6 +1,5 @@
 package level.devlevel;
 
-import components.TorchComponent;
 import contrib.components.AIComponent;
 import contrib.components.HealthComponent;
 import contrib.components.InteractionComponent;
@@ -58,7 +57,7 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
   private final IllusionRiddleHandler riddleHandler;
   private final int originalFogOfWarDistance = FogOfWarSystem.VIEW_DISTANCE;
   private final Coordinate[] chestSpawns;
-  private DevDungeonRoom lastRoom = null;
+  DevDungeonRoom lastRoom = null;
   private boolean lastTorchState = false;
 
   public IllusionRiddleLevel(
@@ -213,8 +212,8 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
                 if (devDungeonRoom == null || devDungeonRoom != this.rooms.getLast()) {
                   return; // should not happen, just if boss dies while not in boss room
                 }
-                this.lightTorch(devDungeonRoom, 0, false);
-                this.lightTorch(devDungeonRoom, 1, false);
+                this.lastRoom.lightTorch(devDungeonRoom, 0, false);
+                this.lastRoom.lightTorch(devDungeonRoom, 1, false);
 
                 this.exitTiles().forEach(tile -> tile.tintColor(-1)); // Workaround due to FogOfWar
               });
@@ -233,8 +232,8 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
 
             double healthPercentage = (double) currentHealth / maxHealth;
             if (healthPercentage <= 0.5) {
-              this.lightTorch(devDungeonRoom, 0, true);
-              this.lightTorch(devDungeonRoom, 1, true);
+              this.lastRoom.lightTorch(devDungeonRoom, 0, true);
+              this.lastRoom.lightTorch(devDungeonRoom, 1, true);
             }
           });
 
@@ -289,21 +288,6 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
     }
 
     this.riddleHandler.onTick(isFirstTick);
-  }
-
-  /** TODO: Refactor this method, and add JavaDoc */
-  public void lightTorch(DevDungeonRoom r, int i, boolean lit) {
-    if (r.torches()[i]
-            .fetch(TorchComponent.class)
-            .orElseThrow(
-                () -> MissingComponentException.build(r.torches()[i], TorchComponent.class))
-            .lit()
-        == lit) return;
-    r.torches()[i]
-        .fetch(InteractionComponent.class)
-        .orElseThrow(
-            () -> MissingComponentException.build(r.torches()[i], InteractionComponent.class))
-        .triggerInteraction(r.torches()[i], Game.hero().orElse(null));
   }
 
   /**
