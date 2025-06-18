@@ -162,17 +162,7 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
 
       spawnBossAndHandleEvents();
 
-      // Secret Passages
-      EntityUtils.spawnLever(
-          this.leverSpawns[0].toCenteredPoint(),
-          new OpenPassageCommand(this.secretPassages[0][0], this.secretPassages[0][1]));
-      EntityUtils.spawnLever(
-          this.leverSpawns[1].toCenteredPoint(),
-          new OpenPassageCommand(this.secretPassages[1][0], this.secretPassages[1][1]));
-      EntityUtils.spawnLever(
-          this.leverSpawns[2].toCenteredPoint(),
-          new OpenPassageCommand(this.secretPassages[2][0], this.secretPassages[2][1]));
-      this.spawnChestsAndCauldrons();
+      spawnSecretPassages();
     }
 
     if (this.lastRoom != this.getCurrentRoom()) {
@@ -213,6 +203,22 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
     }
 
     this.riddleHandler.onTick(isFirstTick);
+  }
+
+  /**
+   * Spawns secret passages
+   */
+  private void spawnSecretPassages() {
+    EntityUtils.spawnLever(
+        this.leverSpawns[0].toCenteredPoint(),
+        new OpenPassageCommand(this.secretPassages[0][0], this.secretPassages[0][1]));
+    EntityUtils.spawnLever(
+        this.leverSpawns[1].toCenteredPoint(),
+        new OpenPassageCommand(this.secretPassages[1][0], this.secretPassages[1][1]));
+    EntityUtils.spawnLever(
+        this.leverSpawns[2].toCenteredPoint(),
+        new OpenPassageCommand(this.secretPassages[2][0], this.secretPassages[2][1]));
+    this.spawnChestsAndCauldrons();
   }
 
   /**
