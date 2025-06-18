@@ -215,16 +215,11 @@ public class IllusionRiddleLevel extends DevDungeonLevel implements ITickable {
    * Spawns secret passages
    */
   private void spawnSecretPassages() {
-    EntityUtils.spawnLever(
-        this.leverSpawns[0].toCenteredPoint(),
-        new OpenPassageCommand(this.secretPassages[0][0], this.secretPassages[0][1]));
-    EntityUtils.spawnLever(
-        this.leverSpawns[1].toCenteredPoint(),
-        new OpenPassageCommand(this.secretPassages[1][0], this.secretPassages[1][1]));
-    EntityUtils.spawnLever(
-        this.leverSpawns[2].toCenteredPoint(),
-        new OpenPassageCommand(this.secretPassages[2][0], this.secretPassages[2][1]));
-    this.spawnChestsAndCauldrons();
+    for (int index =0; index <= 2; index++) {
+      EntityUtils.spawnLever(
+        this.leverSpawns[index].toCenteredPoint(),
+        new OpenPassageCommand(this.secretPassages[index][0], this.secretPassages[index][1]));
+    }
   }
 
   /**
