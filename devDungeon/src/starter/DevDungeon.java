@@ -67,7 +67,7 @@ public class DevDungeon {
           setupMusic();
           Crafting.loadRecipes();
           if (SKIP_TUTORIAL) {
-            DUNGEON_LOADER.loadLevel(DUNGEON_LOADER.levelOrder()[3]); // I started with the third Level
+            DUNGEON_LOADER.loadLevel(DUNGEON_LOADER.levelOrder()[4]); // I started with the fourth Level
           } else {
             DUNGEON_LOADER.loadLevel(DUNGEON_LOADER.levelOrder()[0]); // Tutorial
           }
