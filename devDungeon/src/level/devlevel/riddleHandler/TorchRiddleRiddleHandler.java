@@ -221,6 +221,11 @@ public class TorchRiddleRiddleHandler implements ITickable {
    * @return The sum of the values of all lit torches in the game.
    */
   private int getSumOfLitTorches() {
-    throw new UnsupportedOperationException("Not implemented yet.");
+    return Game.entityStream()
+        .filter(e -> e.isPresent(TorchComponent.class))
+        .map(e -> e.fetch(TorchComponent.class).get())
+        .filter(tc -> tc.lit() && tc.value() > 0)
+        .mapToInt(TorchComponent::value)
+        .sum();
   }
 }

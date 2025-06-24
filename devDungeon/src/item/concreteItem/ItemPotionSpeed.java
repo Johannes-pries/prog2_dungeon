@@ -10,21 +10,21 @@ import core.utils.components.path.IPath;
 import core.utils.components.path.SimpleIPath;
 import item.effects.SpeedEffect;
 
-public class ItemPotionSpeedPotion extends Item {
+public class ItemPotionSpeed extends Item {
   public static final IPath DEFAULT_TEXTURE = new SimpleIPath("items/potion/speed_potion.png");
 
   static {
-    Item.ITEMS.put(ItemPotionSpeedPotion.class.getSimpleName(), ItemPotionSpeedPotion.class);
+    Item.ITEMS.put(ItemPotionSpeed.class.getSimpleName(), ItemPotionSpeed.class);
   }
 
   private final SpeedEffect speedEffect;
 
-  public ItemPotionSpeedPotion() {
+  public ItemPotionSpeed() {
     super(
         "Speed Potion",
         "A potion that increases your speed",
         Animation.fromSingleImage(DEFAULT_TEXTURE));
-    this.speedEffect = new SpeedEffect(3, 5);
+    this.speedEffect = new SpeedEffect(6, 30000);
     if (!this.testEffect()) {
       this.description("It looks like this potion is broken...");
     }

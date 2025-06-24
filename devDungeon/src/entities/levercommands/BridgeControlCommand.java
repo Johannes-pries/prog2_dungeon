@@ -1,6 +1,13 @@
 package entities.levercommands;
 
+import java.util.List;
+
+import core.Game;
+import core.level.Tile;
+import core.level.elements.ILevel;
+import core.level.elements.tile.PitTile;
 import core.level.utils.Coordinate;
+import starter.DevDungeon;
 import utils.ICommand;
 
 /**
@@ -32,7 +39,11 @@ public class BridgeControlCommand implements ICommand {
    */
   @Override
   public void execute() {
-    // TODO: Implement bridge raising
+    ILevel level = Game.currentLevel();
+    List<Tile> tiles = level.tilesInArea(topLeft, bottomRight);
+    tiles.stream().filter(t -> t instanceof PitTile)
+    .map(t -> (PitTile) t)
+    .forEach(t -> t.open());
   }
 
   /**
@@ -43,6 +54,10 @@ public class BridgeControlCommand implements ICommand {
    */
   @Override
   public void undo() {
-    // TODO: Implement bridge lowering
+    ILevel level = Game.currentLevel();
+    List<Tile> tiles = level.tilesInArea(topLeft, bottomRight);
+    tiles.stream().filter(t -> t instanceof PitTile)
+    .map(t -> (PitTile) t)
+    .forEach(t -> t.close());
   }
 }

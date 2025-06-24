@@ -2,10 +2,13 @@ package level.devlevel;
 
 import components.TorchComponent;
 import contrib.components.AIComponent;
+import contrib.components.InteractionComponent;
 import core.Entity;
 import core.Game;
 import core.level.Tile;
 import core.level.utils.Coordinate;
+import core.utils.components.MissingComponentException;
+
 import java.util.List;
 import utils.EntityUtils;
 
@@ -190,5 +193,23 @@ public class DevDungeonRoom {
     for (Entity mob : this.mobs) {
       mob.fetch(AIComponent.class).ifPresent(ai -> ai.active(active));
     }
+  }
+
+  /** TODO: Refactor this method, and add JavaDoc 
+   * @param r TODO
+   * @param i TODO
+   * @param lit TODO*/
+  public void lightTorch(DevDungeonRoom r, int i, boolean lit) {
+  if (r.torches()[i]
+          .fetch(TorchComponent.class)
+          .orElseThrow(
+              () -> MissingComponentException.build(r.torches()[i], TorchComponent.class))
+          .lit()
+      == lit) return;
+  r.torches()[i]
+      .fetch(InteractionComponent.class)
+      .orElseThrow(
+          () -> MissingComponentException.build(r.torches()[i], InteractionComponent.class))
+      .triggerInteraction(r.torches()[i], Game.hero().orElse(null));
   }
 }
